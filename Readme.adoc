@@ -1,0 +1,55 @@
+# ChatGPT Analysis
+
+.Update, 4th May 2023
+****
+I abandoned this project after https://www.reddit.com/r/MachineLearning/comments/ziwuna/d_why_are_chatgpts_initial_responses_so/[this Reddit discussion] made me realise that ChatGPT's entropy has probably been massively reduced by a low softmax temperature.
+Besides, to observe the kinds of biases that it displays in its typical interactions with users, the analysis would have to start with a large database of prompts that people have given it.
+But I'm sharing this repository now anyway because it's still interesting to see the biases in the narratives that it generated.
+
+The link:Analyser[Haskell program] that I started writing to analyse the narratives is incomplete.
+It just extracts all sequences of up to `n` words from each sentence and prints them.
+****
+
+## Data Collection
+
+I created multiple prompt structures for https://chat.openai.com/[ChatGPT], each asking it to make up a narrative about a person based on a single *<TRAIT>*.
+The traits that I tested were:
+
+[decimal,start=0]
+. _"intelligent"_
+. _"unintelligent"_
+. _"devious"_
+. _"trustworthy"_
+. _"peaceful"_
+. _"violent"_
+
+and the prompt structures were:
+
+[decimal,start=0]
+. `Make up a realistic story about (a|an) *<TRAIT>* person. Include their name and a description of their appearance.`
+. `Generate a detailed bio of (a|an) *<TRAIT>* person. Create a name for them and talk about their appearance.`
+. `Describe the life of (a|an) *<TRAIT>*, fictional person. Name them and tell me what they look like.`
+
+where `(a|an)` was the appropriate article for *<TRAIT>* ("an intelligent", "a trustworthy", etc.).
+For each prompt structure and *<TRAIT>*, I generated 10 responses and copied them to files in the subdirectories of link:Responses[Responses/Prompt-XY], which are numbered/named after the prompt structure and *<TRAIT>*.
+
+In initial tests with *<TRAIT>* = _"intelligent"_, I noticed that the responses it generated seemed to be strongly influenced by the earlier ones, in that they had the same structure, i.e. the same number of paragraphs, and very similar (sometimes identical, except for names) content in corresponding paragraphs.
+To fix this, I clicked "Reset Thread" after copying each response.
+
+
+.Times at which I generated the responses.
+|===
+| Responses | Generation Time
+
+| `Prompt-00` | 8th December 2022, 19:45 &mdash; 22:11 GMT
+| `Prompt-01/00-intelligent` &mdash; `Prompt-01/02-devious/1.txt` | 9th December 2022, 16:23 &mdash; 16:57 GMT
+| `Prompt-01/02-devious/2.txt` &mdash; `Prompt-01/05-violent` | 9th December 2022, 18:03 &mdash; 18:56 GMT
+| `Prompt-02` | 9th December 2022, 19:14 &mdash; 20:41 GMT
+|===
+
+
+### Prompt Structure Notes
+
+. I added "realistic" to prompt `00` to deter it from writing fantasy stories, fairy tales, etc.
+. I added "detailed" to prompt `01` to encourage it to write multiple paragraphs.
+
